@@ -30,9 +30,9 @@ const getSinglePost = async (id: number): Promise<Post | null> => {
         where: {
             id
         },
-        include:{
-            author:true,
-            category:true
+        include: {
+            author: true,
+            category: true
         }
     });
 
@@ -40,8 +40,33 @@ const getSinglePost = async (id: number): Promise<Post | null> => {
 }
 
 
+const updatePost = async (id: number, data: Post): Promise<Post> => {
+
+    const result = await prisma.post.update({
+        where: {
+            id
+        },
+        data
+    });
+
+    return result
+};
+
+const deletePost = async(id: number): Promise<Post> => {
+    const result = await prisma.post.delete({
+        where: {
+            id
+        }
+    });
+
+    return result
+}
+
+
 export const postService = {
     inserIntoDB,
     getAllPost,
-    getSinglePost
+    getSinglePost,
+    updatePost,
+    deletePost
 }
