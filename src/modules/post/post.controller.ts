@@ -32,8 +32,26 @@ const getAllPost = async(req:Request, res:Response)=>{
     }
 }
 
+const getSinglePost = async(req:Request, res:Response)=>{
+    try {
+        const id = Number(req.params.id);
+        const result = await postService.getSinglePost(id);
+        res.status(200).json({
+            message:"User created successfully",
+            data: result
+        })
+    } catch (error) {
+        res.status(500).json({
+            message:"Internal server error",
+            error: (error as Error).message
+        })
+    }
+}
+
+
 export const postController = {
     inserIntoDB,
-    getAllPost
+    getAllPost,
+    getSinglePost
      
 }
