@@ -13,16 +13,16 @@ async function main() {
         console.log(`Server is running on port ${PORT}`);
     })
 
-    const postUser = await prisma.user.create({
-        data:{
-            email:"aminul1@haque.com",
-            name:"Aminul Haque",
-            password:"aminul123",
-            age:25,
+    // const postUser = await prisma.user.create({
+    //     data:{
+    //         email:"aminul1@haque.com",
+    //         name:"Aminul Haque",
+    //         password:"aminul123",
+    //         age:25,
              
-        }
-    });
-    console.log(postUser);
+    //     }
+    // });
+    // console.log(postUser);
 }
 
 main()

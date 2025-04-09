@@ -19,6 +19,7 @@ model User {
   name     String?
   password String
   age      Int?
+  role     String @default("user")
   profile  Profile?
 
   @@map("users")
