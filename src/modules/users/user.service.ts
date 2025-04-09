@@ -37,8 +37,28 @@ const inserOrUpdateProfile = async(data:Profile):Promise<Profile>=>{
    
 }
 
+const getUser = async ():Promise<User[]> => {
+    const result = await prisma.user.findMany();
+
+    return result;
+}
+
+const getSingleUser = async (id:number):Promise<User | null> => {
+    const result = await prisma.user.findUnique({
+        where:{
+            id
+        },
+        include:{
+            profile:true
+        }
+    });
+
+    return result;
+}
 
 export const userService = {
     inserIntoDB,
-    inserOrUpdateProfile
+    inserOrUpdateProfile,
+    getUser,
+    getSingleUser
 }
