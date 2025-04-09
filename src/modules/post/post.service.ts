@@ -15,12 +15,36 @@ const inserIntoDB = async (data: Post): Promise<Post> => {
     return result;
 };
 
-const getAllPost = async () => {
+const getAllPost = async (options: any) => {
+    const { sortBy, sortOrder, searchTerm, page, limit } = options;
+
     const result = await prisma.post.findMany({
         include: {
             author: true,
             category: true
-        }
+        },
+        orderBy: sortBy && sortOrder ? {
+            [sortBy]: sortOrder
+        } : { createdAt: 'desc' },
+        where: {
+            OR: [
+                {
+                    title: {
+                        contains: searchTerm || undefined,
+                        mode: 'insensitive'
+                    }
+                },
+
+                {
+                    author: {
+                        name: {
+                            contains: searchTerm || undefined,
+                            mode: 'insensitive'
+                        }
+                    }
+                }
+            ]
+        },
     });
     return result;
 };
@@ -52,7 +76,7 @@ const updatePost = async (id: number, data: Post): Promise<Post> => {
     return result
 };
 
-const deletePost = async(id: number): Promise<Post> => {
+const deletePost = async (id: number): Promise<Post> => {
     const result = await prisma.post.delete({
         where: {
             id

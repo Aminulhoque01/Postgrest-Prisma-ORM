@@ -19,7 +19,8 @@ const inserIntoDB = async(req:Request, res:Response) => {
 
 const getAllPost = async(req:Request, res:Response)=>{
     try {
-        const result = await postService.getAllPost();
+        const options = req.query;
+        const result = await postService.getAllPost(options);
         res.status(200).json({
             message:"User created successfully",
             data: result
@@ -82,6 +83,7 @@ const deletePost = async(req:Request, res:Response)=>{
     }
 }
 
+
 export const postController = {
     inserIntoDB,
     getAllPost,
@@ -90,3 +92,4 @@ export const postController = {
     deletePost
      
 }
+
