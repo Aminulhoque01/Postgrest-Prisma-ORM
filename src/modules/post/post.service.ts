@@ -19,37 +19,41 @@ const getAllPost = async (options: any) => {
     const { sortBy, sortOrder, searchTerm, page, limit } = options;
     const skip = parseInt(limit) * parseInt(page) - parseInt(limit) || 0;
     const take = parseInt(limit) || 10;
-    const result = await prisma.post.findMany({
-        skip,
-        take,
-        include: {
-            author: true,
-            category: true
-        },
-        orderBy: sortBy && sortOrder ? {
-            [sortBy]: sortOrder
-        } : { createdAt: 'desc' },
-        where: {
-            OR: [
-                {
-                    title: {
-                        contains: searchTerm || undefined,
-                        mode: 'insensitive'
-                    }
-                },
-
-                {
-                    author: {
-                        name: {
+    
+    return await prisma.$transaction(async (tx) => {
+        const result = await tx.post.findMany({
+            skip,
+            take,
+            include: {
+                author: true,
+                category: true
+            },
+            orderBy: sortBy && sortOrder ? {
+                [sortBy]: sortOrder
+            } : { createdAt: 'desc' },
+            where: {
+                OR: [
+                    {
+                        title: {
                             contains: searchTerm || undefined,
                             mode: 'insensitive'
                         }
+                    },
+    
+                    {
+                        author: {
+                            name: {
+                                contains: searchTerm || undefined,
+                                mode: 'insensitive'
+                            }
+                        }
                     }
-                }
-            ]
-        },
-    });
-    return result;
+                ]
+            },
+        });
+        const total = await tx.post.count()
+        return {data:result, total};
+    })
 };
 
 const getSinglePost = async (id: number): Promise<Post | null> => {

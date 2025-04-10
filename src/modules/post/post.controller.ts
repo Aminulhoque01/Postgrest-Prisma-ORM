@@ -23,7 +23,8 @@ const getAllPost = async(req:Request, res:Response)=>{
         const result = await postService.getAllPost(options);
         res.status(200).json({
             message:"User created successfully",
-            data: result
+            total:result.total,
+            data: result.data
         })
     } catch (error) {
         res.status(500).json({
